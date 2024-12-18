@@ -1,0 +1,27 @@
+<?php
+// Sicherstellen, dass die Datei innerhalb von Moodle aufgerufen wird
+defined('MOODLE_INTERNAL') || die();
+
+// Definiere die Klasse für den Chatbot-Block
+class block_chatbot extends block_base {
+    public function init() {
+        $this->title = get_string('pluginname', 'block_chatbot');
+    }
+
+    function has_config() {
+        return true;
+    }
+
+    function get_content() {
+        global $DB;
+        $content = '';
+        $users = $DB->get_records('user');
+        foreach ($users as $user) {
+            $content .= $user->firstname . ' ' . $user->lastname . '<br>';
+        }
+        $this->content = new stdClass;
+        $this->content->text = $content;
+        $this->content->footer = 'Das wars';
+        return $this->content;
+    }
+}
